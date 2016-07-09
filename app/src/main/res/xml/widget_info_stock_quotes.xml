@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:initialLayout="@layout/widget_stock_quotes"
+    android:minHeight="@dimen/widget_stock_quotes_default_height"
+    android:minWidth="@dimen/widget_stock_quotes_default_width"
+    android:previewImage="@drawable/widget_preview"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0"
+    tools:ignore="UnusedAttribute" />
