@@ -50,18 +50,15 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
   @Override
   public void onBindViewHolder(final ViewHolder viewHolder, final Cursor cursor){
     final String symbol = cursor.getString(cursor.getColumnIndex("symbol"));
-    boolean hasDetails;
     viewHolder.symbol.setText(symbol);
     viewHolder.symbol.setContentDescription(mContext.getString(R.string.a11y_stock_name,symbol));
     String price = cursor.getString(cursor.getColumnIndex("bid_price"));
     if (price.isEmpty()){
-      hasDetails = false;
       viewHolder.bidPrice.setText(mContext.getString(R.string.not_available));
       viewHolder.bidPrice.setContentDescription(mContext.getString(R.string.a11y_stock_price,mContext.getString(R.string.not_available_extended)));
     }else{
       viewHolder.bidPrice.setText(price);
       viewHolder.bidPrice.setContentDescription(mContext.getString(R.string.a11y_stock_price,price));
-      hasDetails = true;
     }
 
     int sdk = Build.VERSION.SDK_INT;
@@ -101,25 +98,14 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
         viewHolder.change.setContentDescription(mContext.getString(R.string.a11y_stock_variation,change));
       }
     }
-    // Valid stock
-    if (hasDetails){
-      viewHolder.stockContainer.setOnClickListener(new View.OnClickListener() {
+    viewHolder.stockContainer.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
           Intent intent = new Intent(mContext, StockDetailsActivity.class);
           intent.putExtra(mContext.getString(R.string.stock_symbol),symbol);
           mContext.startActivity(intent);
         }
-      });
-    // Unknown stock
-    }else{
-      viewHolder.stockContainer.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          Toast.makeText(mContext,mContext.getString(R.string.unknown_stock),Toast.LENGTH_LONG).show();
-        }
-      });
-    }
+    });
   }
 
   @Override public void onItemDismiss(int position) {

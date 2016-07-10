@@ -15,6 +15,7 @@
 
   <string name="not_available" translatable="false">n/a</string>
   <string name="not_available_extended">not available</string>
+  <string name="not_valid"><xliff:g id="name">%1$s</xliff:g> is not a valid stock</string>
   <string name="stock_symbol" translatable="false">stock_symbol</string>
   <string name="current_value">Current value</string>
   <string name="percentage_change">Percentage change</string>

@@ -27,6 +27,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.network.CheckValidStockTask;
+import com.sam_chordas.android.stockhawk.network.CheckValidStockTask.CheckValidStockTaskUpdates;
 import com.sam_chordas.android.stockhawk.rest.QuoteCursorAdapter;
 import com.sam_chordas.android.stockhawk.rest.Utils;
 import com.sam_chordas.android.stockhawk.service.StockIntentService;
@@ -40,7 +42,7 @@ import com.sam_chordas.android.stockhawk.touch_helper.SimpleItemTouchHelperCallb
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MyStocksActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MyStocksActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, CheckValidStockTaskUpdates{
 
   /**
    * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -221,4 +223,41 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     mCursorAdapter.swapCursor(null);
   }
 
+  @Override
+  public void onTaskStarted() {
+
+  }
+
+  @Override
+  public void onFound(String symbol) {
+    Intent intent = new Intent(this, StockIntentService.class);
+    intent.putExtra("tag", "add");
+    intent.putExtra("symbol", symbol);
+    startService(intent);
+  }
+
+  @Override
+  public void onNotFound(final String symbol) {
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        Utils.getWarningSnackBar(mContext,mStockContainer,getString(R.string.not_valid,symbol)).show();
+      }
+    });
+  }
+
+  @Override
+  public void onBadRequest() {
+
+  }
+
+  @Override
+  public void onUnknownResponse() {
+
+  }
+
+  @Override
+  public void onServerDown() {
+
+  }
 }

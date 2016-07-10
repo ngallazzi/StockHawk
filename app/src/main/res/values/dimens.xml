@@ -7,8 +7,8 @@
          https://developer.android.com/design/patterns/navigation-drawer.html -->
   <dimen name="navigation_drawer_width">240dp</dimen>
   <dimen name="stock_info_window_width">320dp</dimen>
-  <dimen name="detail_text_size">16dp</dimen>
-  <dimen name="title_size">20dp</dimen>
+  <dimen name="detail_text_size">16sp</dimen>
+  <dimen name="title_size">20sp</dimen>
   <dimen name="widget_stock_quotes_default_width">180dp</dimen>
   <dimen name="widget_stock_quotes_default_height">180dp</dimen>
   <dimen name="widget_margin">8dp</dimen>

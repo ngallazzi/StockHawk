@@ -14,15 +14,19 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.network.CheckValidStockTask;
 import com.sam_chordas.android.stockhawk.service.StockIntentService;
 
 /**
  * Created by Nicola on 2016-07-07.
  */
 public class SymbolSearchDialogFragment extends DialogFragment {
+    Context mContext;
+    String mSearchedStock;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mContext = context;
     }
 
     @Override
@@ -34,9 +38,10 @@ public class SymbolSearchDialogFragment extends DialogFragment {
                     @Override public void onInput(MaterialDialog dialog, CharSequence input) {
                         // On FAB click, receive user input. Make sure the stock doesn't already exist
                         // in the DB and proceed accordingly
+                        mSearchedStock = input.toString().toUpperCase();
                         Cursor c = getActivity().getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
                                 new String[] { QuoteColumns.SYMBOL }, QuoteColumns.SYMBOL + "= ? OR " +QuoteColumns.SYMBOL + "= ?",
-                                new String[] { input.toString().toUpperCase(), input.toString().toLowerCase() }, null);
+                                new String[] { mSearchedStock, input.toString().toLowerCase() }, null);
                         if (c.getCount() != 0) {
                             Toast toast =
                                     Toast.makeText(getActivity(), getString(R.string.stock_already_saved),
@@ -45,14 +50,10 @@ public class SymbolSearchDialogFragment extends DialogFragment {
                             toast.show();
                             return;
                         } else {
-                            // Add the stock to DB
-                            Intent intent = new Intent(getActivity(), StockIntentService.class);
-                            intent.putExtra("tag", "add");
-                            intent.putExtra("symbol", input.toString());
-                            getActivity().startService(intent);
+                            // Check stock validity
+                            new CheckValidStockTask(mContext,mSearchedStock).execute();
                         }
                     }
                 }).build();
     }
-
 }
